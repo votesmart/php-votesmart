@@ -6,12 +6,12 @@ A PHP library for use with the Vote Smart API(http://votesmart.org/share/api).
 Requirements
 ------------
 
-The PHP libraries require PHP 5 with the SimpleXML extension and "allow_url_fopen" set to 'On' in php.ini. 
+The PHP libraries require PHP 5 with the SimpleXML extension and ``allow_url_fopen`` set to ``On`` in php.ini. 
 
 ------------
 Usage
 ------------
-Using the libraries is fairly simple. You initialize the object with the name one of the methods and any arguments needed in an array. Then a call go getXmlObj() can be made to retrieve a SimpleXML object to work with. Let's say you wanted to get information on a bill...::
+Using the libraries is fairly simple. You initialize the object with the name one of the methods and any arguments needed in an array. Then a call go ``getXmlObj()`` can be made to retrieve a SimpleXML object to work with. Let's say you wanted to get information on a bill...::
 
     // Initialize the VoteSmart object
     $obj = new VoteSmart(
@@ -23,7 +23,7 @@ Using the libraries is fairly simple. You initialize the object with the name on
     // Get the SimpleXML object
     $x = $obj->getXmlObj();
 
-Now $xml_object is a SimpleXML object representative of the XML structure. Here's a small cut from the XML itself.::
+Now ``$xml_object`` is a SimpleXML object representative of the XML structure. Here's a small cut from the XML itself.::
 
     <?xml version="1.0" encoding="UTF-8"?>
     <bio>
