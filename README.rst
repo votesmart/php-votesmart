@@ -58,4 +58,10 @@ And anything with repeating rows like say, committee memberships would just be t
 
     echo $x->office->committee[0]->committeeName;
 
+------------
+Documentation and Support
+------------
+
+All documentation on our API can be found at http://api.votesmart.org/docs/
+
 Any questions about the API or this library can be sent to webmaster@votesmart.org.
