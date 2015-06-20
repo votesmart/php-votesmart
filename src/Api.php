@@ -95,14 +95,14 @@ class Api
     /**
      * SimpleXML object
      *
-     * @var SimpleXMLElement
+     * @var \SimpleXMLElement
      */
     protected $xmlObj;
 
     /**
      * Return SimpleXMLElement object
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function getXmlObj()
     {
@@ -154,20 +154,20 @@ class Api
      * Sets the array key in $_ENV where you are storing your VoteSmart API token, and updates
      * the apiKey stored in this object to point to the new location in $_ENV.
      *
-     * @throws InvalidArgumentException iff the output type isn't a string
-     * @throws Exception iff the API token can't be found in $_ENV
+     * @throws \InvalidArgumentException iff the output type isn't a string
+     * @throws \Exception iff the API token can't be found in $_ENV
      *
      * @param string $envKey The array key in $_ENV where the VoteSmart token exists.
      */
     public function setEnvKey($envKey)
     {
         if (! is_string($envKey)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 "The environment key '{$envKey}' is expecting a string"
             );
         }
         if (empty($_ENV[$envKey])) {
-            throw new Exception(
+            throw new \Exception(
                 "VoteSmart requires an API authentication token. Place it in your application's `\$_ENV['".$envKey."']` variable."
             );
         }
@@ -208,20 +208,20 @@ class Api
     /**
      * Set the expected output type.
      *
-     * @throws InvalidArgumentException iff the output type isn't a string
-     * @throws Exception iff the output type isn't supported
+     * @throws \InvalidArgumentException iff the output type isn't a string
+     * @throws \Exception iff the output type isn't supported
      *
      * @param string $outputType The expected output type from VoteSmart.
      */
     public function setOutputType($outputType)
     {
         if (! is_string($outputType)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 "The output type '{$outputType}' is unsupported."
             );
         }
         if (! in_array($outputType, static::$OUTPUT_TYPES)) {
-            throw new Exception(
+            throw new \Exception(
                 "The output type '{$outputType}' is unsupported."
             );
         }
@@ -247,7 +247,7 @@ class Api
     protected function parseXml($xml)
     {
         $this->xml = $xml;
-        $this->xmlObj = new SimpleXMLElement($this->xml, LIBXML_NOCDATA);
+        $this->xmlObj = new \SimpleXMLElement($this->xml, LIBXML_NOCDATA);
     }
 
     /**
@@ -283,7 +283,7 @@ class Api
      * @param string $method required 'CandidateBio.getBio'
      * @param array $args optional Array('candidateId' => '54321')
      *
-     * @return false|SimpleXMLElement|array
+     * @return false|\SimpleXMLElement|array
      */
     public function query($method, $args = Array())
     {
