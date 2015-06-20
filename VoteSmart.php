@@ -21,6 +21,12 @@
  */
 class VoteSmart
 {
+    //--------------------------------------------------------------------------
+    //
+    //  Static Variables
+    //
+    //--------------------------------------------------------------------------
+
     /**
      * The API endpoint where requests are sent.
      *
@@ -36,8 +42,15 @@ class VoteSmart
      * @var array
      */
     public static $OUTPUT_TYPES = [
-        'XML'
+        'XML',
+        'JSON'
     ];
+
+    //--------------------------------------------------------------------------
+    //
+    //  Variables and get/set functions
+    //
+    //--------------------------------------------------------------------------
 
     /**
      * The full query URL.
@@ -85,15 +98,47 @@ class VoteSmart
     protected $xmlObj;
 
     /**
-     * function getXmlObj
-     *
      * Return SimpleXMLElement object
      *
-     * @return object SimpleXMLElement
+     * @return SimpleXMLElement
      */
     public function getXmlObj()
     {
         return $this->xmlObj;
+    }
+
+    /**
+     * Raw JSON
+     *
+     * @var string
+     */
+    protected $json;
+
+    /**
+     * Return raw JSON string
+     *
+     * @return string
+     */
+    public function getJson()
+    {
+        return $this->json;
+    }
+
+    /**
+     * Decoded JSON data
+     *
+     * @var array
+     */
+    protected $jsonObj;
+
+    /**
+     * Return decoded JSON array.
+     *
+     * @return array
+     */
+    public function getJsonObj()
+    {
+        return $this->jsonObj;
     }
 
     /**
@@ -181,30 +226,62 @@ class VoteSmart
         $this->outputType = $outputType;
     }
 
+    //--------------------------------------------------------------------------
+    //
+    //  Methods
+    //
+    //--------------------------------------------------------------------------
+
+    /* Private Methods */
+
+    /* Protected Methods */
+
     /**
-     * function __construct
+     * Use SimpleXML to drop the whole XML output into an object we can later interact with easily.
+     * Stores both the XML and the constructed SimpleXMLElement object.
      *
-     * Initialize object.
+     * @param string $xml
+     */
+    protected function parseXml($xml)
+    {
+        $this->xml = $xml;
+        $this->xmlObj = new SimpleXMLElement($this->xml, LIBXML_NOCDATA);
+    }
+
+    /**
+     * Take in a JSON string and decode it. Store both the JSON and the decoded array.
+     *
+     * @param string $json
+     */
+    protected function parseJson($json)
+    {
+        $this->json = $json;
+        $this->jsonObj = json_decode($this->json);
+    }
+
+    /* Public Methods */
+
+    /**
+     * Initialize the VoteSmart object and ready it to make queries.
      *
      * @param string $outputType optional The type of output to request from VoteSmart. Default is 'XML'.
      * @param string $envKey optional Key of your Authentication key stored in $_ENV var. Default is 'VOTESMART_API_KEY'.
      */
     public function __construct($outputType = 'XML', $envKey = 'VOTESMART_API_KEY')
     {
-        $this->setEnvKey($envKey);
         $this->setOutputType($outputType);
+        $this->setEnvKey($envKey);
     }
 
     /**
-     * function query
-     *
-     * Query API backend and return SimpleXML object.  This
-     * function can be reused repeatedly
+     * Query API backend and parse the response, either as JSON or XML depending on the instance's outputType
+     * attribute. Returns false if it can't get the contents, a SimpleXMLElement if the output type is XML,
+     * or an array if the output type is JSON.
      *
      * @param string $method required 'CandidateBio.getBio'
      * @param array $args optional Array('candidateId' => '54321')
      *
-     * @return false|SimpleXMLElement false if it can't get the contents, a SimpleXMLElement otherwise
+     * @return false|SimpleXMLElement|array
      */
     public function query($method, $args = Array())
     {
@@ -217,14 +294,18 @@ class VoteSmart
         }
         $this->iface = static::$API_SERVER . "/" . $method . "?key=" . $this->apiToken . "&o=" . $this->outputType  . $terms;
 
-        if (! $this->xml = file_get_contents($this->iface)) {
+        $response = file_get_contents($this->iface);
+        if (! $response) {
             return false;
-        } else {
-            // Let's use the SimpleXML to drop the whole XML
-            // output into an object we can later interact with easily
-            $this->xmlObj = new SimpleXMLElement($this->xml, LIBXML_NOCDATA);
-
-            return $this->xmlObj;
         }
+
+        if ($this->outputType == 'JSON') {
+            $this->parseJson($response);
+            return $this->responseArr;
+        }
+
+        // Parse as XML by default.
+        $this->parseXml($response);
+        return $this->xmlObj;
     }
 }

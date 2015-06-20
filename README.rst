@@ -11,12 +11,20 @@ The PHP libraries require PHP 5 with the SimpleXML extension and ``allow_url_fop
 ------------
 Usage
 ------------
-Using the libraries is fairly simple. You initialize the object, and call ``query()`` to make the call and retrieve the
-SimpleXMLElement object created from the response from VoteSmart. If there is no response, or the request fails,
-the output is boolean ``false``::
+First, you need your API token. Once you get that from VoteSmart.org, store the API token in a file which is loaded
+by your application. It should be defined as::
 
-    // Initialize the VoteSmart object
+    $_ENV['VOTESMART_API_KEY']
+
+Using the libraries is fairly simple. You initialize the object, and call ``query()`` to make the call parse the
+response from VoteSmart. If there is no response, or the request fails, the output is boolean ``false``::
+
+    // Initialize the VoteSmart object. The default output type is XML.
     $obj = new VoteSmart();
+
+    // You can also pass in optional to change the expected output type, and the location where the API token is located
+    // inside the $_ENV global variable. In this case, your VoteSmart API key would be stored in $_ENV['SOME_KEY'].
+    $obj = new VoteSmart('JSON', 'SOME_KEY');
 
     // Make the query with required parameters, with the name of one of the methods, and any required or optional
     // arguments in an array. Let's say you wanted to get information on a bill. For example:
@@ -27,8 +35,12 @@ the output is boolean ``false``::
       )
     );
 
-    // Once a query has been made, you can also get the stored SimpleXMLElement object
+    // Once a query has been made, you can also get the stored decoded response.
+    // If your output type was XML, you could access the SimpleXMLElement object via
     $x = $obj->getXmlObj();
+
+    // If your output type was JSON, you could access the array via
+    $x = $obj->getJsonObj();
 
 Now ``$xml_object`` is a SimpleXML object representative of the XML structure. Here's a small cut from the XML itself.::
 
