@@ -1,4 +1,4 @@
-<?php
+<?php namespace VoteSmart;
 
 /**
  * VoteSmart API interfacing class
@@ -18,8 +18,10 @@
  * @author VoteSmart.org
  * @author Adam Friedman
  * @author Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @class Api
+ * @name Api
  */
-class VoteSmart
+class Api
 {
     //--------------------------------------------------------------------------
     //
