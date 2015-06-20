@@ -13,8 +13,7 @@ Usage
 ------------
 Using the libraries is fairly simple. You initialize the object, and call ``query()`` to make the call and retrieve the
 SimpleXMLElement object created from the response from VoteSmart. If there is no response, or the request fails,
-the output is boolean ``false``.
-. Then a call go ``getXmlObj()`` can be made to retrieve a SimpleXML object to work with.::
+the output is boolean ``false``::
 
     // Initialize the VoteSmart object
     $obj = new VoteSmart();
